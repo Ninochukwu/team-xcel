@@ -1,27 +1,26 @@
 "use strict";
-import fs from "fs";
 import path from "path";
 import Sequelize from "sequelize";
 import process from "process";
-import config from "../../lib/config.lib.js";
+import {config} from "../../lib/config.lib.js";
 import { fileURLToPath } from "url";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const __filename = fileURLToPath( import.meta.url );
-const __dirname = path.dirname( __filename );
 
-const basename = path.basename(__filename);
-const env = config.getEnvironment();
+
+const dotenv = config.getEnvironment();
 const db = {};
 
-import { Sequelize } from 'sequelize';
-import { getOrThrow } from '../../lib/config.lib.js';
+import {getOrThrow}  from '../../lib/config.lib.js'; 
 
-const dbUrl = getOrThrow('DATABASE_URL');
+const DATABASE_URL = getOrThrow('DATABASE_URL'); 
 
-const sequelize = new Sequelize(dbUrl, {
+const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
-  logging: false,
 });
+
+
 
 
 db.sequelize = sequelize;
@@ -40,3 +39,4 @@ const connectToDatabase = async () =>
 };
 
 export { db, connectToDatabase };
+

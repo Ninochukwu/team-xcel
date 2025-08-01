@@ -2,33 +2,30 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const config = {
-    get( key )
-    {
-        return process.env[key];
-    },
+  databaseUrl: process.env.DATABASE_URL,
+  port: process.env.PORT || 3000,
 
-    getOrThrow(key) {
-        const value = this.get(key);
+  get(key) {
+    return this[key];
+  },
 
-        if(!value) {
-            throw new Error(`Missing environment variable: ${key}`);
-        }
-
-        return value;
+  getOrThrow(key) {
+    const value = this[key];
+    if (!value) { 
+      throw new Error(`Missing required configuration: ${key}`);
     }
+    return value;
+  },
+  getEnvironment() {
+    return process.env.NODE_ENV || 'development';
 }
-export default {
-    getOrThrow ( key )
-    {
-        const value = process.env[ key ];
+}
 
-        if ( !value ) throw new Error( `Missing required environment variable: ${key}` );
 
-        return value;
-    },
-
-    getEnvironment ()
-    {
-        return process.env.NODE_ENV || 'development';
-    }
+export function getOrThrow(key) {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+  return value;
 }
