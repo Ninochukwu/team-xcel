@@ -1,42 +1,31 @@
 "use strict";
-import path from "path";
-import Sequelize from "sequelize";
-import process from "process";
-import {config} from "../../lib/config.lib.js";
-import { fileURLToPath } from "url";
+
+import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
+
 dotenv.config();
 
+const DATABASE_URL = process.env.DATABASE_URL;
+
+if (!DATABASE_URL) {
+  throw new Error('Missing DATABASE_URL in environment variables');
+}
 
 
-const dotenv = config.getEnvironment();
-const db = {};
-
-import {getOrThrow}  from '../../lib/config.lib.js'; 
-
-const DATABASE_URL = getOrThrow('DATABASE_URL'); 
-
-const sequelize = new Sequelize(DATABASE_URL, {
+export const sequelize = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
+  logging: false, 
 });
 
-
-
-
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-const connectToDatabase = async () =>
-{
+export const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync( { alter: true } );
-    console.log( "Connection has been established successfully." );
+    console.log(' Database connection established successfully.');
   } catch (error) {
-    console.error("Unable to connect to the database:", error);
-    process.exit(1);
+    console.error('Unable to connect to the database:', error);
   }
 };
 
-export { db, connectToDatabase };
-
+export const db = {
+  sequelize,
+};

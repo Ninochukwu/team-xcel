@@ -1,9 +1,7 @@
 import { Sequelize } from "sequelize";
 import { config } from "./config.lib.js";
 
-
-
-export const sequelize = new Sequelize(config.getOrThrow("DATABASE_URL"));
+export const sequelize = new Sequelize(config.getOrThrow("PG_URI"));
 
 export const connectToDatabase = async () => {
   try {
